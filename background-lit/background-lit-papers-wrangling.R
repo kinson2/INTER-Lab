@@ -1,5 +1,5 @@
 #
-temp = list.files(path = '/Users/kinson2/Library/CloudStorage/Box-Box/Employee Documents/Teaching Associate Professor/reading-group-papers/papers-data/', pattern = "\\.csv$", full.names = TRUE)
+temp = list.files(path = '/Users/kinson2/Library/CloudStorage/Box-Box/Employee Documents/Teaching Associate Professor/INTER-LAB/background-lit-papers-data/', pattern = "\\.csv$", full.names = TRUE)
 temp
 d0 = lapply(temp, read.csv)
 length(d0)
@@ -19,7 +19,17 @@ d4
 d5 = d4
 d5$Authors = stringr::str_replace_all(toupper(d4$Authors), "\\s\\|", ",")
 sort(d5$Authors)
-d5$Title = toupper(d5$Title)
-d5$Publication = toupper(d5$Publication)
+d5$Title
 
-readr::write_csv(d5, file = '/Users/kinson2/Library/CloudStorage/Box-Box/Employee Documents/Teaching Associate Professor/reading-group-papers/papers-data/papers-dataset.csv')
+duplicates2 <- duplicated(d5$URL)
+d6 <- d5[!duplicates2, ]
+
+d6$Title = toupper(d6$Title)
+d6$Publication = toupper(d6$Publication)
+ids <- stringr::str_which(d6$URL, "doi|http")
+setdiff(1:nrow(d6),ids)
+d7 <- d6[-setdiff(1:nrow(d6),ids), ]
+d7
+duplicated(d7)
+
+readr::write_csv(d7, file = '/Users/kinson2/Library/CloudStorage/Box-Box/Employee Documents/Teaching Associate Professor/INTER-LAB/background-lit-papers-data/papers-dataset.csv')
